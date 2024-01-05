@@ -12,5 +12,5 @@ check if there is another repository.
 
 Libraries in the Java automation foundation:
 
-- [qaddict-validation](qaddict-validation/README.md) - Ready to use extensible tools for composing and execution of validation of any complexity, while providing insights into exact points of mismatch.
+- [qaddict-validation](qaddict-validation) - Ready to use extensible tools for composing and execution of validation of any complexity, while providing insights into exact points of mismatch.
 
