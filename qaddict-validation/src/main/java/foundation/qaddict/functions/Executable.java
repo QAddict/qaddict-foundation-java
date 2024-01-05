@@ -1,5 +1,7 @@
 package foundation.qaddict.functions;
 
-public interface Code {
+public interface Executable {
+
     void run() throws Throwable;
+
 }
