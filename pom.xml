@@ -7,7 +7,7 @@
     <groupId>org.qaddict</groupId>
     <artifactId>qaddict-foundation-java</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <modules>
         <module>qaddict-validation</module>
     </modules>
