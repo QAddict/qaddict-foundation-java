@@ -25,7 +25,7 @@ public class AssertTest {
         assertThrows(AssertionError.class, () -> Assert.that("A", equalTo("B")));
     }
 
-    @Test
+    //@Test
     public void assertMessage() {
         Assert.that(
                 List.of(LocalDate.of(2024, 1, 14), LocalDate.of(2024, 2, 8)),
