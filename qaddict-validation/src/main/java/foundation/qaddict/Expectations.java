@@ -8,8 +8,8 @@ import foundation.qaddict.expectation.Negation;
 import foundation.qaddict.expectation.OperatorExpectation;
 import foundation.qaddict.expectation.PredicateExpectation;
 import foundation.qaddict.expectation.TransformedExpectation;
-import foundation.qaddict.expectation.iterable.ContainsInAnyOrderExpectation;
-import foundation.qaddict.expectation.iterable.EqualsInAnyOrderExpectation;
+import foundation.qaddict.expectation.iterable.InAnyOrderExpectation;
+import foundation.qaddict.expectation.iterable.Mode;
 import foundation.qaddict.functions.Logic;
 import foundation.qaddict.functions.Transformation;
 
@@ -283,7 +283,7 @@ public final class Expectations {
     }
 
     public static <D> Expectation<Iterable<D>> collectionEqualsInAnyOrder(Collection<Expectation<? super D>> expectations) {
-        return new EqualsInAnyOrderExpectation<>(expectations);
+        return new InAnyOrderExpectation<>(expectations, Mode.EQUALS);
     }
 
     @SafeVarargs
@@ -292,7 +292,7 @@ public final class Expectations {
     }
 
     public static <D> Expectation<Iterable<D>> collectionContainsInAnyOrder(Collection<Expectation<? super D>> expectations) {
-        return new ContainsInAnyOrderExpectation<>(expectations);
+        return new InAnyOrderExpectation<>(expectations, Mode.CONTAINS);
     }
 
     public static <D> Expectation<D> byExample(D exampleBean) {
