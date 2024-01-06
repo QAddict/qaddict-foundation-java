@@ -13,7 +13,7 @@ public class RetryTest {
 
     @Test
     public void test() {
-        Retry<Integer> retry = new Retry<>(1, 3, Duration.ofSeconds(1));
+        Retry<Integer> retry = new Retry<>(1, 3, Duration.ofMillis(100));
         Iterator<Integer> iterator = retry.iterator();
         assertTrue(iterator.hasNext());
         assertEquals(1, iterator.next());

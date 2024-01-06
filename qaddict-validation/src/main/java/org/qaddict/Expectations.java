@@ -8,8 +8,9 @@ import org.qaddict.expectation.Negation;
 import org.qaddict.expectation.OperatorExpectation;
 import org.qaddict.expectation.PredicateExpectation;
 import org.qaddict.expectation.TransformedExpectation;
-import org.qaddict.expectation.iterable.InAnyOrderExpectation;
-import org.qaddict.expectation.iterable.Mode;
+import org.qaddict.expectation.InAnyOrderExpectation;
+import org.qaddict.expectation.InOrderOfDefinitionExpectation;
+import org.qaddict.expectation.Mode;
 import org.qaddict.functions.Logic;
 import org.qaddict.functions.Transformation;
 
@@ -293,6 +294,47 @@ public final class Expectations {
 
     public static <D> Expectation<Iterable<D>> collectionContainsInAnyOrder(Collection<Expectation<? super D>> expectations) {
         return new InAnyOrderExpectation<>(expectations, Mode.CONTAINS);
+    }
+
+    @SafeVarargs
+    public static <D> Expectation<Iterable<D>> collectionContainsInAnyOrder(Expectation<? super D>... expectations) {
+        return Expectations.<D>collectionContainsInAnyOrder(List.of(expectations));
+    }
+
+    public static <D> Expectation<Iterable<D>> collectionStartsInAnyOrderWith(Collection<Expectation<? super D>> expectations) {
+        return new InAnyOrderExpectation<>(expectations, Mode.STARTS);
+    }
+
+    @SafeVarargs
+    public static <D> Expectation<Iterable<D>> collectionStartsInAnyOrderWith(Expectation<? super D>... expectations) {
+        return Expectations.<D>collectionStartsInAnyOrderWith(List.of(expectations));
+    }
+
+    public static <D> Expectation<Iterable<D>> collectionEquals(Collection<Expectation<? super D>> expectations) {
+        return new InOrderOfDefinitionExpectation<>(expectations, Mode.EQUALS);
+    }
+
+    @SafeVarargs
+    public static <D> Expectation<Iterable<D>> collectionEquals(Expectation<? super D>... expectations) {
+        return Expectations.<D>collectionEquals(List.of(expectations));
+    }
+
+    public static <D> Expectation<Iterable<D>> collectionContains(Collection<Expectation<? super D>> expectations) {
+        return new InOrderOfDefinitionExpectation<>(expectations, Mode.CONTAINS);
+    }
+
+    @SafeVarargs
+    public static <D> Expectation<Iterable<D>> collectionContains(Expectation<? super D>... expectations) {
+        return Expectations.<D>collectionContains(List.of(expectations));
+    }
+
+    public static <D> Expectation<Iterable<D>> collectionStartsWith(Collection<Expectation<? super D>> expectations) {
+        return new InOrderOfDefinitionExpectation<>(expectations, Mode.STARTS);
+    }
+
+    @SafeVarargs
+    public static <D> Expectation<Iterable<D>> collectionStartsWith(Expectation<? super D>... expectations) {
+        return Expectations.<D>collectionStartsWith(List.of(expectations));
     }
 
     public static <D> Expectation<D> byExample(D exampleBean) {

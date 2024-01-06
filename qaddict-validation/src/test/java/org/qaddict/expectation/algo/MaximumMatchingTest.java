@@ -1,9 +1,9 @@
 package org.qaddict.expectation.algo;
 
 import org.qaddict.Assert;
-import org.qaddict.expectation.iterable.algo.MaximumMatching;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.qaddict.algo.MaximumMatching;
 
 import java.util.List;
 

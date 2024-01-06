@@ -20,9 +20,18 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
     }
 
     public interface Builder<D> {
+
         Expectation<? super D> expectation();
 
-        EvaluationNode evaluate(D item);
+        default EvaluationNode evaluate(D item) {
+            return add(actualValue(item, expectation().evaluate(item)));
+        }
+
+        EvaluationNode add(EvaluationNode node);
+
+        default boolean add(Builder<?> b, boolean result) {
+            return add(EvaluationNodes.expectation(b.expectation(), b.build(result))).result();
+        }
 
         EvaluationNode build(boolean result);
     }
@@ -30,15 +39,15 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
     private record BuilderImpl<D>(Expectation<? super D> expectation, List<EvaluationNode> nodes) implements Builder<D> {
 
         @Override
-        public EvaluationNode evaluate(D item) {
-            EvaluationNode evaluated = expectation.evaluate(item);
-            nodes.add(actualValue(item, evaluated));
-            return evaluated;
+        public EvaluationNode add(EvaluationNode node) {
+            nodes.add(node);
+            return node;
         }
 
         @Override
         public EvaluationNode build(boolean result) {
             return EvaluationNodes.expectation(expectation().toString(), compose(result, nodes));
         }
+
     }
 }
