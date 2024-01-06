@@ -3,7 +3,7 @@
     <parent>
         <artifactId>qaddict-foundation-java</artifactId>
         <groupId>org.qaddict</groupId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.5-BETA</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
