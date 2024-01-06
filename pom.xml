@@ -5,7 +5,7 @@
     <groupId>org.qaddict</groupId>
     <artifactId>qaddict-foundation-java</artifactId>
     <packaging>pom</packaging>
-    <version>0.2-BETA</version>
+    <version>0.3-SNAPSHOT</version>
     <modules>
         <module>qaddict-validation</module>
     </modules>
@@ -45,7 +45,7 @@
         <connection>scm:git:git://github.com/QAddict/qaddict-foundation-java.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/QAddict/qaddict-foundation-java.git</developerConnection>
         <url>https://github.com/QAddict/qaddict-foundation-java</url>
-        <tag>qaddict-foundation-java-0.2-BETA</tag>
+        <tag>qaddict-foundation-java-0.1</tag>
     </scm>
 
     <distributionManagement>
