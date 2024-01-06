@@ -1,4 +1,4 @@
-package org.qaddict.expectation.iterable.algo;
+package org.qaddict.algo;
 
 
 import java.util.Collection;

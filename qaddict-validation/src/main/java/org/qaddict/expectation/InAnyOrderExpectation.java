@@ -1,10 +1,10 @@
-package org.qaddict.expectation.iterable;
+package org.qaddict.expectation;
 
 import org.qaddict.Expectation;
 import org.qaddict.evaluation.ComposedNode;
 import org.qaddict.evaluation.ComposedNode.Builder;
 import org.qaddict.evaluation.EvaluationNode;
-import org.qaddict.expectation.iterable.algo.MaximumMatching;
+import org.qaddict.algo.MaximumMatching;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,15 +24,16 @@ public record InAnyOrderExpectation<D>(Collection<Expectation<? super D>> expect
 
     @Override
     public EvaluationNode evaluate(Iterable<D> data) {
+        if(data == null)
+            return expectation("collection " + mode + " in order of definition " + expectations(), result(false));
         var graph = new MaximumMatching<D, Expectation<? super D>>();
         List<ComposedNode.Builder<D>> evaluationBuilders = buildersFor(expectations);
         Stream<D> stream = StreamSupport.stream(data.spliterator(), false);
-        if(switch (mode) {
+        return expectation("collection " + mode + " in any order " + expectations(), compose(switch (mode) {
             case EQUALS -> equals(stream, evaluationBuilders, graph);
             case CONTAINS -> contains(stream, evaluationBuilders, graph);
             case STARTS -> starts(stream, evaluationBuilders, graph);
-        }) return expectation("collection " + mode + " in any order " + expectations(), compose(true, byPairing(evaluationBuilders, graph)));
-        return expectation("collection " + mode + " in any order " + expectations(), compose(false, byPairing2(evaluationBuilders, graph)));
+        }, byPairing2(evaluationBuilders, graph)));
     }
 
     private boolean equals(Stream<D> data, List<ComposedNode.Builder<D>> evaluationBuilders, MaximumMatching<D, Expectation<? super D>> graph) {

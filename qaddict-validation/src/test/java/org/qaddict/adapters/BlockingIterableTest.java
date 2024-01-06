@@ -18,8 +18,8 @@ public class BlockingIterableTest {
     @Test
     public void test() {
         BlockingDeque<Integer> deque = new LinkedBlockingDeque<>();
-        BlockingIterable<Integer> integers = new BlockingIterable<>(deque, 800, MILLISECONDS);
-        new Thread(() -> stream(new Retry<>(1, 4, Duration.ofMillis(500)).spliterator(), false).forEach(deque::add)).start();
+        BlockingIterable<Integer> integers = new BlockingIterable<>(deque, 200, MILLISECONDS);
+        new Thread(() -> stream(new Retry<>(1, 4, Duration.ofMillis(40)).spliterator(), false).forEach(deque::add)).start();
         Iterator<Integer> iterator = integers.iterator();
         assertTrue(iterator.hasNext());
         assertEquals(1, iterator.next());

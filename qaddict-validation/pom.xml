@@ -8,6 +8,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>qaddict-validation</artifactId>
+    <name>QAddict validation</name>
+    <description>Foundation of ready to use executable expectations.</description>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
