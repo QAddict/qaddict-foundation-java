@@ -1,4 +1,4 @@
-# QAddict validation foundation
+# QAddict validation org
 
 > ,,Assurance of quality is about precise validation, that actual behavior meets `Expectation`''
 
@@ -7,9 +7,11 @@ _QAddict_ brings
 ## 1. Quick start
 ### 1.1 Dependency
 The library is available in Maven central repository. So with maven or gradle simply use the following dependency.
+
 ```xml
+
 <dependency>
-    <groupId>foundation.qaddict</groupId>
+    <groupId>org.qaddict</groupId>
     <artifactId>qaddict-validation</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
@@ -21,16 +23,18 @@ To start immediately using the validations using this library, one needs two cla
 - Mechanism to `Assert` that the data meet expectation, and fails the test if not.
 
 Simple validation by comparing actual value to expected value:
+
 ```java
-import foundation.qaddict.Assert;
-import static foundation.qaddict.Expectations.equalTo;
+import org.qaddict.Assert;
+
+import static org.qaddict.Expectations.equalTo;
 
 public class SimpleTest {
 
     @Test
     public void test() {
         String actualValue = getActualValue();
-        
+
         Assert.that(actualValue, equalTo("A"));
     }
 
@@ -40,14 +44,12 @@ The class `Expectations` is source of many useful methods. You can explore them 
 To demonstrate quickly the power of the available tools see following examples.
 
 ```java
-import foundation.qaddict.Assert;
+import org.qaddict.Assert;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
 
-import static foundation.qaddict.Expectations.allOf;
-import static foundation.qaddict.Expectations.has;
+import static org.qaddict.Expectations.allOf;
+import static org.qaddict.Expectations.has;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.Month.JANUARY;
 
@@ -98,7 +100,7 @@ You can think of it as a predicate.
 It's generic, and it contains 1 method (plus one default shortcut method):
 
 ```java
-import foundation.qaddict.evaluation.EvaluationNode;
+import org.qaddict.evaluation.EvaluationNode;
 
 public interface Expectation<D> {
 
@@ -139,7 +141,7 @@ has(transformation).matching(expectation)
 Rich source of ready to use expectations and expectation factory methods is the class
 
 ```java
-foundation.qaddict.Expectations;
+org.qaddict.Expectations;
 ```
 
 Always check this class first for existing methods.
@@ -179,7 +181,7 @@ then we need to have `Iterable`, which can block execution until next event come
 The solution is an adapter of `BlockingQueue` to `Iterable`:
 
 ```java
-foundation.qaddict.adapters.BlockingIterable;
+org.qaddict.adapters.BlockingIterable;
 ```
 
 ### 2.4 Failing the test
