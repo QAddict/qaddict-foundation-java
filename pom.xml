@@ -5,7 +5,7 @@
     <groupId>org.qaddict</groupId>
     <artifactId>qaddict-foundation-java</artifactId>
     <packaging>pom</packaging>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
 
     <name>QAddict foundation for Java</name>
     <description>Foundation for automated testing in Java.</description>
