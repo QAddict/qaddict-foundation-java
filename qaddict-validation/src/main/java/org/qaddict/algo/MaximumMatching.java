@@ -2,8 +2,8 @@ package org.qaddict.algo;
 
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +20,7 @@ public record MaximumMatching<I, O>(Map<I, Collection<O>> edges, Map<O, I> pairi
     }
 
     public Map<O, I> update(I start, Collection<O> ends) {
-        edges.put(start, ends);
+        edges.computeIfAbsent(start, key -> new LinkedHashSet<>()).addAll(ends);
         free.add(start);
         generate(this::findImprovingPath).takeWhile(Objects::nonNull).flatMap(path -> iterate(path, Objects::nonNull, e -> e.prev.prev)).forEach(e -> {
             pairing.put(e.node, e.prev.node);
