@@ -2,9 +2,8 @@ package org.qaddict.algo;
 
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
@@ -17,7 +16,7 @@ import static java.util.stream.Stream.iterate;
 public record MaximumMatching<I, O>(Map<I, Collection<O>> edges, Map<O, I> pairing, Set<I> free) {
 
     public MaximumMatching() {
-        this(new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashSet<>());
+        this(new HashMap<>(), new HashMap<>(), new HashSet<>());
     }
 
     public Map<O, I> update(I start, Collection<O> ends) {
@@ -46,5 +45,14 @@ public record MaximumMatching<I, O>(Map<I, Collection<O>> edges, Map<O, I> pairi
         return null;
     }
 
-    private record Edge<I, O>(Edge<O, I> prev, I node) {}
+    public interface Node<I> {
+        I getValue();
+    }
+
+    public static <I> Node<I> node(I i) {
+        return () -> i;
+    }
+
+    public record Edge<I, O>(Edge<O, I> prev, I node) {}
+
 }
