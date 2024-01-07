@@ -1,6 +1,7 @@
 package org.qaddict.evaluation;
 
 import org.qaddict.Expectation;
+import org.qaddict.algo.MaximumMatching;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +17,10 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
     }
 
     public static <D> Builder<D> builderFor(Expectation<? super D> expectation) {
-        return new BuilderImpl<>(expectation, new ArrayList<>());
+        return new BuilderImpl<>(expectation);
     }
 
-    public interface Builder<D> {
+    public interface Builder<D> extends MaximumMatching.Node<Expectation<? super D>> {
 
         Expectation<? super D> expectation();
 
@@ -36,7 +37,18 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
         EvaluationNode build(boolean result);
     }
 
-    private record BuilderImpl<D>(Expectation<? super D> expectation, List<EvaluationNode> nodes) implements Builder<D> {
+    private static final class BuilderImpl<D> implements Builder<D> {
+        private final Expectation<? super D> expectation;
+        private final List<EvaluationNode> nodes = new ArrayList<>();
+
+        private BuilderImpl(Expectation<? super D> expectation) {
+            this.expectation = expectation;
+        }
+
+        @Override
+        public Expectation<? super D> expectation() {
+            return expectation;
+        }
 
         @Override
         public EvaluationNode add(EvaluationNode node) {
@@ -49,5 +61,9 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
             return EvaluationNodes.expectation(expectation().toString(), compose(result, nodes));
         }
 
+        @Override
+        public Expectation<? super D> getValue() {
+            return expectation;
+        }
     }
 }

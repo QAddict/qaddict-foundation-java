@@ -22,15 +22,20 @@ public record InOrderOfDefinitionExpectation<D>(Collection<Expectation<? super D
     @Override
     public EvaluationNode evaluate(Iterable<D> data) {
         if(data == null)
-            return expectation("collection " + mode + " in order of definition " + expectations(), result(false));
+            return expectation(toString(), result(false));
         var iterator = data.iterator();
         Builder<Iterable<D>> builder = builderFor(this);
         Stream<? extends Builder<D>> stream = expectations.stream().map(ComposedNode::builderFor);
-        return expectation("collection " + mode + " in order of definition " + expectations(), builder.build(switch (mode) {
+        return builder.build(switch (mode) {
             case EQUALS -> equals(iterator, stream, builder);
             case CONTAINS -> contains(iterator, stream, builder);
             case STARTS -> starts(iterator, stream, builder);
-        }));
+        });
+    }
+
+    @Override
+    public String toString() {
+        return "collection " + mode + " in order of definition " + expectations();
     }
 
     private boolean equals(Iterator<D> iterator, Stream<? extends Builder<D>> expectations, Builder<Iterable<D>> builder) {
