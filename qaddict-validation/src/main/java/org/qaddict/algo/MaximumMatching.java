@@ -2,6 +2,7 @@ package org.qaddict.algo;
 
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
