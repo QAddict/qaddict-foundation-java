@@ -1,5 +1,6 @@
 package org.qaddict.expectation;
 
+import org.qaddict.Described;
 import org.qaddict.Expectation;
 import org.qaddict.algo.MaximumMatching;
 import org.qaddict.algo.MaximumMatching.Node;
@@ -26,15 +27,20 @@ public record InAnyOrderExpectation<D>(Collection<Expectation<? super D>> expect
     @Override
     public EvaluationNode evaluate(Iterable<D> data) {
         if(data == null)
-            return expectation("collection " + mode + " in order of definition " + expectations(), result(false));
+            return expectation(this, result(false));
         var graph = new MaximumMatching<Node<D>, Builder<D>>();
         List<ComposedNode.Builder<D>> evaluationBuilders = buildersFor(expectations);
         Stream<D> stream = StreamSupport.stream(data.spliterator(), false);
-        return expectation("collection " + mode + " in any order " + expectations(), compose(switch (mode) {
+        return expectation(this, compose(switch (mode) {
             case EQUALS -> equals(stream, evaluationBuilders, graph);
             case CONTAINS -> contains(stream, evaluationBuilders, graph);
             case STARTS -> starts(stream, evaluationBuilders, graph);
         }, byPairing2(evaluationBuilders, graph)));
+    }
+
+    @Override
+    public Object description() {
+        return "collection " + mode + " in order of definition " + expectations().stream().map(Expectation::description).toList();
     }
 
     private boolean equals(Stream<D> data, List<Builder<D>> evaluationBuilders, MaximumMatching<Node<D>, Builder<D>> graph) {
@@ -57,7 +63,7 @@ public record InAnyOrderExpectation<D>(Collection<Expectation<? super D>> expect
     private static <D> List<EvaluationNode> byPairing2(List<Builder<D>> evaluationBuilders, MaximumMatching<Node<D>, Builder<D>> graph) {
         return graph.free().isEmpty() ? byPairing(evaluationBuilders, graph) : concat(
                 evaluationBuilders.stream().map(builder -> builder.build(graph.pairing().containsKey(builder))),
-                Stream.of(actualValue(graph.free().size() + " items", expectation("No extra items", result(false))))
+                Stream.of(actualValue(graph.free().size() + " items", expectation(Described.description("No extra items"), result(false))))
         ).collect(toList());
     }
 

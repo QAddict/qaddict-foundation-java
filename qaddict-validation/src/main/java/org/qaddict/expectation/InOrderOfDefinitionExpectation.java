@@ -1,5 +1,6 @@
 package org.qaddict.expectation;
 
+import org.qaddict.Described;
 import org.qaddict.Expectation;
 import org.qaddict.evaluation.ComposedNode;
 import org.qaddict.evaluation.ComposedNode.Builder;
@@ -22,7 +23,7 @@ public record InOrderOfDefinitionExpectation<D>(Collection<Expectation<? super D
     @Override
     public EvaluationNode evaluate(Iterable<D> data) {
         if(data == null)
-            return expectation(toString(), result(false));
+            return expectation(this, result(false));
         var iterator = data.iterator();
         Builder<Iterable<D>> builder = builderFor(this);
         Stream<? extends Builder<D>> stream = expectations.stream().map(ComposedNode::builderFor);
@@ -34,12 +35,12 @@ public record InOrderOfDefinitionExpectation<D>(Collection<Expectation<? super D
     }
 
     @Override
-    public String toString() {
-        return "collection " + mode + " in order of definition " + expectations();
+    public String description() {
+        return "collection " + mode + " in order of definition " + expectations().stream().map(Expectation::description).toList();
     }
 
     private boolean equals(Iterator<D> iterator, Stream<? extends Builder<D>> expectations, Builder<Iterable<D>> builder) {
-        return starts(iterator, expectations, builder) && (!iterator.hasNext() || builder.add(expectation("No extra items", actualValue(extraItems(iterator), result(false)))).result());
+        return starts(iterator, expectations, builder) && (!iterator.hasNext() || builder.add(expectation(Described.description("No extra items"), actualValue(extraItems(iterator), result(false)))).result());
     }
 
     private boolean starts(Iterator<D> iterator, Stream<? extends Builder<D>> builders, Builder<Iterable<D>> builder) {

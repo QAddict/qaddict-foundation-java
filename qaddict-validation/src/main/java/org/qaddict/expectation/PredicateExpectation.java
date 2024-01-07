@@ -16,4 +16,10 @@ public record PredicateExpectation<D>(Logic<D> predicate) implements Expectation
             return throwable(throwable);
         }
     }
+
+    @Override
+    public Object description() {
+        return "";
+    }
+
 }

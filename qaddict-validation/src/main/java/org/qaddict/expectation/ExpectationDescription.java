@@ -8,7 +8,7 @@ public record ExpectationDescription<D>(Object description, Expectation<D> expec
 
     @Override
     public EvaluationNode evaluate(D data) {
-        return EvaluationNodes.expectation(description, expectation.evaluate(data));
+        return EvaluationNodes.expectation(this, expectation.evaluate(data));
     }
 
 }

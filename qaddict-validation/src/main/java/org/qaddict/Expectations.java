@@ -1,16 +1,17 @@
 package org.qaddict;
 
 import org.qaddict.expectation.ConditionalPredicate;
+import org.qaddict.expectation.EveryElementExpectation;
 import org.qaddict.expectation.ExpectationBuilder;
 import org.qaddict.expectation.ExpectationDescription;
 import org.qaddict.expectation.FluentTransformation;
+import org.qaddict.expectation.InAnyOrderExpectation;
+import org.qaddict.expectation.InOrderOfDefinitionExpectation;
+import org.qaddict.expectation.Mode;
 import org.qaddict.expectation.Negation;
 import org.qaddict.expectation.OperatorExpectation;
 import org.qaddict.expectation.PredicateExpectation;
 import org.qaddict.expectation.TransformedExpectation;
-import org.qaddict.expectation.InAnyOrderExpectation;
-import org.qaddict.expectation.InOrderOfDefinitionExpectation;
-import org.qaddict.expectation.Mode;
 import org.qaddict.functions.Logic;
 import org.qaddict.functions.Transformation;
 
@@ -27,6 +28,7 @@ import static java.lang.reflect.Array.getLength;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+@SuppressWarnings("unused")
 public final class Expectations {
 
     private static final Expectation<Object> IS_NULL = sameInstanceAs(null);
@@ -335,6 +337,22 @@ public final class Expectations {
     @SafeVarargs
     public static <D> Expectation<Iterable<D>> collectionStartsWith(Expectation<? super D>... expectations) {
         return Expectations.<D>collectionStartsWith(List.of(expectations));
+    }
+
+    public static <D> Expectation<Iterable<D>> everyElement(Expectation<? super D> expectation) {
+        return new EveryElementExpectation<>(expectation);
+    }
+
+    public static <D> Expectation<Iterable<D>> everyElement(D expectedElement) {
+        return everyElement(equalTo(expectedElement));
+    }
+
+    public static <D> Expectation<Iterable<D>> existsElement(Expectation<? super D> expectation) {
+        return collectionContains(expectation);
+    }
+
+    public static <D> Expectation<Iterable<D>> existsElement(D expectedElement) {
+        return existsElement(equalTo(expectedElement));
     }
 
     public static <D> Expectation<D> byExample(D exampleBean) {

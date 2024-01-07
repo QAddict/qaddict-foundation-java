@@ -11,12 +11,15 @@ import static org.qaddict.Expectations.collectionEqualsInAnyOrder;
 import static org.qaddict.Expectations.collectionStartsInAnyOrderWith;
 import static org.qaddict.Expectations.collectionStartsWith;
 import static org.qaddict.Expectations.endsWith;
+import static org.qaddict.Expectations.everyElement;
+import static org.qaddict.Expectations.existsElement;
 import static org.qaddict.Expectations.startsWith;
 import static org.qaddict.When.expectation;
 
 public class IteratorExpectationsTest {
 
-    private static final String A = "A", B = "B", AB = "AB";
+    private static final String A = "A";
+    private static final String B = "B";
 
     @Test public void t001() { expectation(collectionEquals(startsWith(A), endsWith(B))).appliedOn(List.of(A, B)).shouldReturn(true); }
     @Test public void t002() { expectation(collectionEquals(startsWith(A), endsWith(B))).appliedOn(List.of(A, A, B)).shouldReturn(false); }
@@ -67,5 +70,21 @@ public class IteratorExpectationsTest {
     @Test public void t056() { expectation(collectionStartsInAnyOrderWith(startsWith(A), endsWith(B))).appliedOn(null).shouldReturn(false); }
     @Test public void t057() { expectation(collectionStartsInAnyOrderWith(startsWith(A), endsWith(B))).appliedOn(List.of(B, A)).shouldReturn(true); }
     @Test public void t058() { expectation(collectionStartsInAnyOrderWith(startsWith(A), endsWith(B))).appliedOn(List.of(B, A, A)).shouldReturn(true); }
+
+    @Test public void t061() { expectation(everyElement(A)).appliedOn(List.of()).shouldReturn(true);}
+    @Test public void t062() { expectation(everyElement(A)).appliedOn(List.of(A)).shouldReturn(true);}
+    @Test public void t063() { expectation(everyElement(A)).appliedOn(List.of(A, A, A)).shouldReturn(true);}
+    @Test public void t064() { expectation(everyElement(A)).appliedOn(List.of(A, B)).shouldReturn(false);}
+    @Test public void t065() { expectation(everyElement(A)).appliedOn(List.of(B, A)).shouldReturn(false);}
+    @Test public void t066() { expectation(everyElement(A)).appliedOn(List.of(B, B)).shouldReturn(false);}
+    @Test public void t067() { expectation(everyElement(A)).appliedOn(null).shouldReturn(false);}
+
+    @Test public void t071() { expectation(existsElement(A)).appliedOn(List.of()).shouldReturn(false);}
+    @Test public void t072() { expectation(existsElement(A)).appliedOn(List.of(A)).shouldReturn(true);}
+    @Test public void t073() { expectation(existsElement(A)).appliedOn(List.of(A, A, A)).shouldReturn(true);}
+    @Test public void t074() { expectation(existsElement(A)).appliedOn(List.of(A, B)).shouldReturn(true);}
+    @Test public void t075() { expectation(existsElement(A)).appliedOn(List.of(B, A)).shouldReturn(true);}
+    @Test public void t076() { expectation(existsElement(A)).appliedOn(List.of(B, B)).shouldReturn(false);}
+    @Test public void t077() { expectation(existsElement(A)).appliedOn(null).shouldReturn(false);}
 
 }
