@@ -8,7 +8,7 @@ import org.qaddict.evaluation.EvaluationNode;
  * by re-usable pieces.
  * @param <D> Type of the data to be validated.
  */
-public interface Expectation<D> {
+public interface Expectation<D> extends Described {
 
     /**
      * Evaluate the expectation on provided data.

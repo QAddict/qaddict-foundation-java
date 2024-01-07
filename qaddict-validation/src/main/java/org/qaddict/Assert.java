@@ -41,23 +41,24 @@ public class Assert {
      * @return String with listed mismatches causing the validation failure.
      */
     public static String describe(ActualValueNode node) {
-        return describe(node.child(), new StringJoiner(" "), "", node.actualValue(), false, "");
+        return describe(node.child(), new StringJoiner(" ", "", " "), Described.description(""), node.actualValue(), false, "");
     }
 
-    private static String describe(EvaluationNode node, StringJoiner path, Object expectation, Object actualValue, boolean failureCandidate, String prefix) {
+    private static String describe(EvaluationNode node, StringJoiner path, Described expectation, Object actualValue, boolean failureCandidate, String prefix) {
         return switch (node) {
             case CandidateInversionNode n -> describe(n.child(), path, expectation, actualValue, failureCandidate, prefix);
-            case ResultNode n -> prefix + "Expected: " + path + expectation + ", but was: " + actualValue;
+            case ResultNode ignored -> prefix + "Expected: " + path + expectation + ", but was: " + actualValue;
             case PathNode n -> describe(n.child(), path.add(String.valueOf(n.name())), expectation, actualValue, failureCandidate, prefix);
             case ActualValueNode n -> describe(n.child(), path, expectation, n.actualValue(), failureCandidate, prefix);
-            case ExpectationNode n -> describe(n.child(), path, n.expectation(), actualValue, failureCandidate, prefix);
+            case ExpectationNode n -> describe(n.child(), path, n.description(), actualValue, failureCandidate, prefix);
             case ThrowableNode n -> prefix + "Expected: " + path + expectation + ", but has thrown: " + n.throwable();
-            case ComposedNode n -> prefix + node(expectation, actualValue) + "\n" + n.children().stream().filter(child -> child.result() == failureCandidate)
-                    .map(child -> describe(child, new StringJoiner(" "), "", actualValue, failureCandidate, prefix + "\t")).collect(joining("\n"));
+            case ComposedNode n -> prefix + node(path, expectation, actualValue) + "\n" + n.children().stream().filter(child -> child.result() == failureCandidate)
+                    .map(child -> describe(child, new StringJoiner(" ", "", " "), Described.description(""), actualValue, failureCandidate, prefix + "\t")).collect(joining("\n"));
         };
     }
 
-    private static String node(Object expectation, Object actualValue) {
-        return isNull(expectation) || expectation.toString().isBlank() ? "Item: " + actualValue : "Expected: " + expectation;
+    private static String node(StringJoiner path, Described expectation, Object actualValue) {
+        return isNull(expectation) || expectation.toString().isBlank() ? "Item: " + actualValue : "Expected: " + path + expectation;
     }
+
 }

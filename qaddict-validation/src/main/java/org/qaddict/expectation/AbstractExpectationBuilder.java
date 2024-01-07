@@ -10,9 +10,11 @@ import java.util.List;
 public abstract class AbstractExpectationBuilder<T, D> implements Expectation<D> {
 
     private final List<Expectation<? super D>> operands;
+    private final OperatorExpectation<D> operator;
 
     public AbstractExpectationBuilder(List<Expectation<? super D>> operands) {
         this.operands = operands;
+        this.operator = new OperatorExpectation<>(operands, OperatorExpectation.AND);
     }
 
     public AbstractExpectationBuilder() {
@@ -21,9 +23,12 @@ public abstract class AbstractExpectationBuilder<T, D> implements Expectation<D>
 
     @Override
     public EvaluationNode evaluate(D data) {
-        return operands.size() == 1
-                ? operands.get(0).evaluate(data)
-                : new OperatorExpectation<>(operands, OperatorExpectation.AND).evaluate(data);
+        return operands.size() == 1 ? operands.getFirst().evaluate(data) : operator.evaluate(data);
+    }
+
+    @Override
+    public Object description() {
+        return operands.size() > 5 ? "Item to match " + operands.size() + " expectations" : operator.description();
     }
 
     public T and(Expectation<? super D> expectation) {

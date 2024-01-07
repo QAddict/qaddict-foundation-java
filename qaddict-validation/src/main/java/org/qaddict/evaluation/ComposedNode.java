@@ -58,7 +58,7 @@ public record ComposedNode(boolean result, List<EvaluationNode> children) implem
 
         @Override
         public EvaluationNode build(boolean result) {
-            return EvaluationNodes.expectation(expectation().toString(), compose(result, nodes));
+            return EvaluationNodes.expectation(expectation(), compose(result, nodes));
         }
 
         @Override

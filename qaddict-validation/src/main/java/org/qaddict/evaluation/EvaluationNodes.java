@@ -1,5 +1,7 @@
 package org.qaddict.evaluation;
 
+import org.qaddict.Described;
+
 import java.util.List;
 
 public final class EvaluationNodes {
@@ -16,7 +18,7 @@ public final class EvaluationNodes {
         return new PathNode(result, name, node);
     }
 
-    public static ExpectationNode expectation(Object expectation, EvaluationNode node) {
+    public static ExpectationNode expectation(Described expectation, EvaluationNode node) {
         return new ExpectationNode(node.result(), expectation, node);
     }
 

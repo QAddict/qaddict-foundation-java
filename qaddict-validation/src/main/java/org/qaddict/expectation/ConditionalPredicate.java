@@ -11,4 +11,9 @@ public record ConditionalPredicate<D>(Expectation<? super D> condition, Expectat
         return conditionNode.result() ? expectation.evaluate(data) : conditionNode;
     }
 
+    @Override
+    public Object description() {
+        return expectation().description();
+    }
+
 }

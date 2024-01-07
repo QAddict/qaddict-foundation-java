@@ -9,7 +9,12 @@ public record ThrowableExpectation(Expectation<? super Throwable> expectation) i
     @Override
     public EvaluationNode evaluate(Executable data) {
         EvaluationNode node = expectation.evaluate(run(data));
-        return new ExpectationNode(node.result(), "Thrown throwable", node);
+        return new ExpectationNode(node.result(), this, node);
+    }
+
+    @Override
+    public String description() {
+        return "throw throwable " + expectation.description();
     }
 
     private Throwable run(Executable executable) {

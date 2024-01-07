@@ -19,4 +19,9 @@ public record TransformedExpectation<D, V>(Transformation<? super D, ? extends V
         }
     }
 
+    @Override
+    public Object description() {
+        return expectation.description();
+    }
+
 }

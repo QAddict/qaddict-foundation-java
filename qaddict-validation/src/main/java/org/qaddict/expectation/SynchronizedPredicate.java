@@ -12,4 +12,9 @@ public record SynchronizedPredicate<D>(Expectation<D> expectation) implements Ex
         }
     }
 
+    @Override
+    public Object description() {
+        return expectation.description();
+    }
+
 }

@@ -13,4 +13,9 @@ public record Negation<D>(Expectation<D> positiveExpectation) implements Expecta
         return named(!node.result(), "not", invert(node));
     }
 
+    @Override
+    public Object description() {
+        return "not " + positiveExpectation.description();
+    }
+
 }
