@@ -1,4 +1,4 @@
-# QAddict org for Java
+# QAddict foundation for Java
 
 > ,,We are Addicted to Quality''
 
