@@ -1,5 +1,6 @@
 package org.qaddict;
 
+import org.qaddict.adapters.Retry;
 import org.qaddict.expectation.ConditionalPredicate;
 import org.qaddict.expectation.EveryElementExpectation;
 import org.qaddict.expectation.ExpectationBuilder;
@@ -11,10 +12,13 @@ import org.qaddict.expectation.Mode;
 import org.qaddict.expectation.Negation;
 import org.qaddict.expectation.OperatorExpectation;
 import org.qaddict.expectation.PredicateExpectation;
+import org.qaddict.expectation.ThrowableExpectation;
 import org.qaddict.expectation.TransformedExpectation;
+import org.qaddict.functions.Executable;
 import org.qaddict.functions.Logic;
 import org.qaddict.functions.Transformation;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +32,9 @@ import static java.lang.reflect.Array.getLength;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+/**
+ * Utility class providing factory methods for building plenty of ready to use expectations.
+ */
 @SuppressWarnings("unused")
 public final class Expectations {
 
@@ -45,6 +52,14 @@ public final class Expectations {
         return describe(description, new PredicateExpectation<>(logic));
     }
 
+    /**
+     * Create expectation using description and implementation logic (predicate).
+     *
+     * @param description Description of the expectation.
+     * @param logic Implementation logic.
+     * @return Expectation.
+     * @param <D> Type of the data on which the expectation may apply.
+     */
     public static <D> Expectation<D> expect(String description, Logic<D> logic) {
         return expect0(description, logic);
     }
@@ -358,6 +373,18 @@ public final class Expectations {
     public static <D> Expectation<D> byExample(D exampleBean) {
         if(exampleBean == null) return sameInstanceAs(null);
         return allOf(Stream.of(exampleBean.getClass().getMethods()).filter(m -> m.getName().startsWith("get")).map(m -> new TransformedExpectation<>(m::invoke, new PredicateExpectation<>(v -> Objects.equals(v, m.invoke(exampleBean))))).collect(toList()));
+    }
+
+    public static Expectation<Executable> throwing(Expectation<? super Throwable> expectation) {
+        return new ThrowableExpectation(expectation);
+    }
+
+    public static <D> Expectation<D> retryUntilMatch(Expectation<? super D> expectation, int max, Duration delay) {
+        return retry(existsElement(expectation), max, delay);
+    }
+
+    public static <D> Expectation<D> retry(Expectation<? super Iterable<D>> expectation, int max, Duration delay) {
+        return has((D d) -> new Retry<>(d, max, delay)).matching(expectation);
     }
 
 }
