@@ -18,6 +18,7 @@ import org.qaddict.functions.Executable;
 import org.qaddict.functions.Logic;
 import org.qaddict.functions.Transformation;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Comparator;
@@ -64,8 +65,21 @@ public final class Expectations {
         return expect0(description, logic);
     }
 
+    /**
+     * Create expectation, which is satisfied, when actual value is exactly the same instance as provided
+     * 'expectedInstance'. It really uses under the hood equality operator ==, which compares instances.
+     *
+     * @param expectedInstance Expected instance.
+     * @return New Expectation.
+     * @param <D> Type of the data, on which the expectation may apply. It should be equal to the type of expected
+     *           instance.
+     */
     public static <D> Expectation<D> sameInstanceAs(D expectedInstance) {
         return expect0(expectedInstance, actualInstance -> expectedInstance == actualInstance);
+    }
+
+    public static Expectation<Object> instanceOf(Class<?> expectedClass) {
+        return expect("instance of " + expectedClass, expectedClass::isInstance);
     }
 
     public static <D> Expectation<D> require(Expectation<? super D> requirement, Expectation<? super D> expectation) {
@@ -300,6 +314,10 @@ public final class Expectations {
         return new ExpectationBuilder<D>().and(transformation);
     }
 
+    public static <V> FluentTransformation<V, Expectation<Object>> as(Class<V> requiredClass) {
+        return c -> require(instanceOf(requiredClass), has(requiredClass::cast).matching(c));
+    }
+
     public static <D> Expectation<Iterable<D>> collectionEqualsInAnyOrder(Collection<Expectation<? super D>> expectations) {
         return new InAnyOrderExpectation<>(expectations, Mode.EQUALS);
     }
@@ -385,6 +403,34 @@ public final class Expectations {
 
     public static <D> Expectation<D> retry(Expectation<? super Iterable<D>> expectation, int max, Duration delay) {
         return has((D d) -> new Retry<>(d, max, delay)).matching(expectation);
+    }
+
+    public static Expectation<File> fileExists() {
+        return expect("file exists", File::exists);
+    }
+
+    public static Expectation<File> isReadableFile() {
+        return expect("file exists", File::canRead);
+    }
+
+    public static Expectation<File> isWriteableFile() {
+        return expect("file exists", File::canWrite);
+    }
+
+    public static Expectation<String> path(Expectation<? super File> expectation) {
+        return has((String s) -> new File(s)).matching(expectation);
+    }
+
+    public static Expectation<String> pathExists() {
+        return path(fileExists());
+    }
+
+    public static Expectation<String> isReadablePath() {
+        return path(isReadableFile());
+    }
+
+    public static Expectation<String> isWriteablePath() {
+        return path(isWriteableFile());
     }
 
 }
